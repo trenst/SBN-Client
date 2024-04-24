@@ -21,8 +21,6 @@
 #    includes the unmodified FSW source file.
 #
  
-set(UT_NAME sbn_client) # UT_NAME is used in severl locations later in this file
-
 # Use the UT assert public API, and allow direct
 # inclusion of source files that are normally private
 include_directories(${osal_MISSION_DIR}/ut_assert/inc)  #osal_MISSION_DIR = ${MISSION_SOURCE_DIR}/osal, UT source files for ut_assert

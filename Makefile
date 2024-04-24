@@ -10,16 +10,15 @@ SBN_INC := -I$(cFS_ROOT)/apps/sbn/fsw/platform_inc -I$(cFS_ROOT)/apps/sbn/fsw/sr
 
 CPU1_ROOT := $(cFS_ROOT)/build/native/default_cpu1
 CONFIG_INC := -I$(CPU1_ROOT)/inc
+BUILD_INC := -I$(cFS_ROOT)/build/inc
 OSAL_INC_OSCONFIG := -I$(CPU1_ROOT)/osal/inc
-CONFIG_INC_2 := -I$(cFS_ROOT)/build/inc
+
 CFE_INC := -I$(cFS_ROOT)/cfe/modules/core_api/fsw/inc
 OSAL_INC := -I$(cFS_ROOT)/osal/src/os/inc
 MSG_INC = -I$(cFS_ROOT)/cfe/modules/msg/fsw/inc
-
-#OSAL_BSP_INC := -I../../osal/src/bsp/pc-linux/config
 PSP_INC := -I$(cFS_ROOT)/psp/fsw/inc
-# PSP_BSP_INC := -I../../psp/fsw/pc-linux/inc
-ALL_INC := $(CONFIG_INC) $(OSAL_INC_OSCONFIG) $(CONFIG_INC_2) $(SBN_CLIENT_INC) $(SBN_INC) $(CFE_INC) $(OSAL_INC) $(MSG_INC) $(PSP_INC)
+
+ALL_INC := $(CONFIG_INC) $(OSAL_INC_OSCONFIG) $(BUILD_INC) $(SBN_CLIENT_INC) $(SBN_INC) $(CFE_INC) $(OSAL_INC) $(MSG_INC) $(PSP_INC)
 
 LIBS := -lpthread
 
