@@ -359,10 +359,4 @@ int32 __wrap_CFE_SB_RcvMsg(CFE_SB_MsgPtr_t *BufPtr, CFE_SB_PipeId_t PipeId,
     return status;
 } /* end __wrap_CFE_SB_RcvMsg */
 
-int32 __wrap_CFE_SB_ZeroCopySend(CFE_MSG_Message_t *MsgPtr, 
-                                 CFE_SB_ZeroCopyHandle_t BufferHandle)
-{
-    printf ("SBN_CLIENT: ERROR CFE_SB_ZeroCopySend not yet implemented\n");
-    return -1;
-} /* end __wrap_CFE_SB_ZeroCopySend */
 

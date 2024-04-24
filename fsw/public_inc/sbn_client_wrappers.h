@@ -116,26 +116,5 @@ int32  __wrap_CFE_SB_UnsubscribeLocal(CFE_SB_MsgId_t, CFE_SB_PipeId_t);
 **/
 uint32 __wrap_CFE_SB_SendMsg(CFE_MSG_Message_t *);
 
-/*****************************************************************************/
-/** 
-** \brief SBN_Client replacement for CFE_SB_RcvMsg that 
-**
-** \par Description see \ref CFEAPISBMessage
-**          \copybrief CFE_SB_RcvMsg
-**
-**/
-int32  __wrap_CFE_SB_RcvMsg(CFE_SB_MsgPtr_t *, CFE_SB_PipeId_t, int32);
-
-/*****************************************************************************/
-/** 
-** \brief SBN_Client replacement for CFE_SB_ZeroCopySend that 
-**
-** \par Description 
-**          CFE_SB_ZeroCopySend not yet implemented.
-**
-**/
-int32 __wrap_CFE_SB_ZeroCopySend(CFE_MSG_Message_t *, CFE_SB_ZeroCopyHandle_t);
-/**@}*/
-
 #endif /* _sbn_client_wrappers_h_ */
 /*****************************************************************************/

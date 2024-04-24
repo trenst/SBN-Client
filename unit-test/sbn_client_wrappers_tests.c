@@ -1023,23 +1023,6 @@ void Test__wrap_CFE_SB_UnsubscribeLocal_AlwaysFails(void)
         "__wrap_CFE_SB_UnsubscribeLocal failed and returned -1");
 } /* end Test__wrap_CFE_SB_UnsubscribeLocal_AlwaysFails */
 
-void Test__wrap_CFE_SB_ZeroCopySend_AlwaysFails(void)
-{
-    /* Arrange */
-    int32 expectedResult = -1;
-    CFE_SB_Msg_t *dummyMsg = NULL;
-    CFE_SB_ZeroCopyHandle_t dummyHandle = NULL;
-    
-    /* Act */ 
-    int32 result = CFE_SB_ZeroCopySend(dummyMsg, dummyHandle);
-    
-    /* Assert */
-    UtAssert_True(result == expectedResult, 
-        "__wrap_CFE_SB_ZeroCopySend failed and returned -1");
-} /* end Test__wrap_CFE_SB_ZeroCopySend_AlwaysFails */
-
-/* end __wrap_CFE_SB_RcvMsg Tests */
-
 /*******************************************************************************
 **
 **  add test group functions
