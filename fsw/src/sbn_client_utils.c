@@ -121,7 +121,7 @@ void invalidate_pipe(CFE_SBN_Client_PipeD_t *pipe)
     
     for(i = 0; i < CFE_SBN_CLIENT_MAX_MSG_IDS_PER_PIPE; i++)
     {
-        pipe->SubscribedMsgIds[i] = CFE_SBN_CLIENT_INVALID_MSG_ID;
+        pipe->SubscribedMsgIds[i].Value = CFE_SBN_CLIENT_INVALID_MSG_ID;
     }
     
     
@@ -170,7 +170,7 @@ uint8 CFE_SBN_Client_GetMessageSubscribeIndex(CFE_SB_PipeId_t PipeId)
     
     for (i = 0; i < CFE_SBN_CLIENT_MAX_MSG_IDS_PER_PIPE; i++)
     {
-        if (PipeTbl[PipeId].SubscribedMsgIds[i] == CFE_SBN_CLIENT_INVALID_MSG_ID)
+        if (PipeTbl[PipeId].SubscribedMsgIds[i].Value == CFE_SBN_CLIENT_INVALID_MSG_ID)
         {
             return i;
         }
@@ -181,10 +181,12 @@ uint8 CFE_SBN_Client_GetMessageSubscribeIndex(CFE_SB_PipeId_t PipeId)
 
 CFE_SB_MsgId_t CFE_SBN_Client_GetMsgId(CFE_SB_MsgPtr_t MsgPtr)
 {
-    CFE_SB_MsgId_t MsgId = 0;
+    CFE_SB_MsgId_t MsgId = {.Value = 0};
 
 #ifndef MESSAGE_FORMAT_IS_CCSDS_VER_2
-    MsgId = CCSDS_RD_SID(MsgPtr->Hdr);
+    // sakdbg
+    //MsgId = CCSDS_RD_SID(MsgPtr->Hdr);
+    CFE_MSG_GetMsgId(MsgPtr, &MsgId);
 #else
 
     uint32            SubSystemId;
@@ -223,7 +225,10 @@ int send_heartbeat(int sockfd)
 
 uint16 CFE_SBN_Client_GetTotalMsgLength(CFE_SB_MsgPtr_t MsgPtr)
 {
-    return CCSDS_RD_LEN(MsgPtr->Hdr);
+    //sakdbg return CCSDS_RD_LEN(MsgPtr->Hdr);
+    CFE_MSG_Size_t Size;
+    CFE_MSG_GetSize(MsgPtr, &Size);
+    return Size;
 }/* end CFE_SBN_Client_GetTotalMsgLength */
 
 int connect_to_server(const char *server_ip, uint16_t server_port)

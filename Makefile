@@ -1,26 +1,34 @@
-SBN_CLIENT_SRC = ./fsw/src
-SBN_CLIENT_INC = -I./fsw/public_inc
-SBN_INC = -I../sbn/fsw/public_inc -I../sbn/fsw/platform_inc -I../sbn/fsw/src
+SBN_CLIENT_SRC := ./fsw/src
+SBN_CLIENT_INC := -I./fsw/public_inc
+cFS_ROOT := ../cfs
+SBN_INC := -I$(cFS_ROOT)/apps/sbn/fsw/platform_inc -I$(cFS_ROOT)/apps/sbn/fsw/src
 
 # cfe_platform_cfg.h is build specific, and comes from the defs folder.
 # Link the platform cfg you want (such as x86-64_platform_cfg.h) as cfe_defs/cfe_platform_cfg.h
 # The same goes for cfe_defs/cfe_mission_cfg.h, cfe_defs/cfe_msgids.h, cfe_defs/cfe_perfids.h
-CFE_DEFS = -I./cfe_defs
+#CFE_DEFS = -I./cfe_defs
 
-CFE_INC = -I../../cfe/fsw/cfe-core/src/inc
-OSAL_INC = -I../../osal/src/os/inc
-OSAL_BSP_INC = -I../../osal/src/bsp/pc-linux/config
-PSP_INC = -I../../psp/fsw/inc
-PSP_BSP_INC = -I../../psp/fsw/pc-linux/inc
+CPU1_ROOT := $(cFS_ROOT)/build/native/default_cpu1
+CONFIG_INC := -I$(CPU1_ROOT)/inc
+OSAL_INC_OSCONFIG := -I$(CPU1_ROOT)/osal/inc
+CONFIG_INC_2 := -I$(cFS_ROOT)/build/inc
+CFE_INC := -I$(cFS_ROOT)/cfe/modules/core_api/fsw/inc
+OSAL_INC := -I$(cFS_ROOT)/osal/src/os/inc
+MSG_INC = -I$(cFS_ROOT)/cfe/modules/msg/fsw/inc
 
-LIBS = -lpthread
+#OSAL_BSP_INC := -I../../osal/src/bsp/pc-linux/config
+PSP_INC := -I$(cFS_ROOT)/psp/fsw/inc
+# PSP_BSP_INC := -I../../psp/fsw/pc-linux/inc
+ALL_INC := $(CONFIG_INC) $(OSAL_INC_OSCONFIG) $(CONFIG_INC_2) $(SBN_CLIENT_INC) $(SBN_INC) $(CFE_INC) $(OSAL_INC) $(MSG_INC) $(PSP_INC)
 
-SC_OBJS := sbn_client.a
-SC_OBJS += sbn_client_ingest.a
-SC_OBJS += sbn_client_init.a
-SC_OBJS += sbn_client_minders.a
-SC_OBJS += sbn_client_utils.a
-SC_OBJS += sbn_client_wrappers.a
+LIBS := -lpthread
+
+# SC_OBJS := sbn_client.a
+# SC_OBJS += sbn_client_ingest.a
+# SC_OBJS += sbn_client_init.a
+# SC_OBJS += sbn_client_minders.a
+# SC_OBJS += sbn_client_utils.a
+# SC_OBJS += sbn_client_wrappers.a
 
 A_FILES := $(patsubst %.c,%.a,$(wildcard $(SBN_CLIENT_SRC)/*.c))
 
@@ -30,7 +38,8 @@ libsbn_client.so: $(A_FILES)
 	gcc -shared $^ -o libsbn_client.so
 
 %.a : %.c
-	gcc -Wall -Werror -c -fPIC $< $(SBN_CLIENT_INC) $(CFE_DEFS) $(CFE_INC) $(OSAL_INC) $(OSAL_BSP_INC) $(PSP_INC) $(PSP_BSP_INC) $(SBN_INC) $(LIBS) -o $@
+	echo "$$A_FILES = $(A_FILES)"
+	gcc -Wall -Werror -c -fPIC $< $(ALL_INC) $(LIBS) -o $@
 	objcopy --redefine-syms=unwrap_symbols.txt $@
 
 clean:

@@ -190,7 +190,7 @@ int32 __wrap_CFE_SB_UnsubscribeLocal(CFE_SB_MsgId_t  MsgId,
     return -1;
 } /* end __wrap_CFE_SB_UnsubscribeLocal */
 
-uint32 __wrap_CFE_SB_SendMsg(CFE_SB_Msg_t *msg)
+uint32 __wrap_CFE_SB_SendMsg(CFE_MSG_Message_t *msg)
 {
     char *buffer;
     uint16 msg_size = CFE_SBN_Client_GetTotalMsgLength(msg);
@@ -359,7 +359,7 @@ int32 __wrap_CFE_SB_RcvMsg(CFE_SB_MsgPtr_t *BufPtr, CFE_SB_PipeId_t PipeId,
     return status;
 } /* end __wrap_CFE_SB_RcvMsg */
 
-int32 __wrap_CFE_SB_ZeroCopySend(CFE_SB_Msg_t *MsgPtr, 
+int32 __wrap_CFE_SB_ZeroCopySend(CFE_MSG_Message_t *MsgPtr, 
                                  CFE_SB_ZeroCopyHandle_t BufferHandle)
 {
     printf ("SBN_CLIENT: ERROR CFE_SB_ZeroCopySend not yet implemented\n");

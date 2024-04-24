@@ -114,7 +114,7 @@ int32  __wrap_CFE_SB_UnsubscribeLocal(CFE_SB_MsgId_t, CFE_SB_PipeId_t);
 **          \copybrief CFE_SB_SendMsg
 **
 **/
-uint32 __wrap_CFE_SB_SendMsg(CFE_SB_Msg_t *);
+uint32 __wrap_CFE_SB_SendMsg(CFE_MSG_Message_t *);
 
 /*****************************************************************************/
 /** 
@@ -134,7 +134,7 @@ int32  __wrap_CFE_SB_RcvMsg(CFE_SB_MsgPtr_t *, CFE_SB_PipeId_t, int32);
 **          CFE_SB_ZeroCopySend not yet implemented.
 **
 **/
-int32 __wrap_CFE_SB_ZeroCopySend(CFE_SB_Msg_t *, CFE_SB_ZeroCopyHandle_t);
+int32 __wrap_CFE_SB_ZeroCopySend(CFE_MSG_Message_t *, CFE_SB_ZeroCopyHandle_t);
 /**@}*/
 
 #endif /* _sbn_client_wrappers_h_ */

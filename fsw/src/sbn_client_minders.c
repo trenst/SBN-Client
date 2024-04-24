@@ -20,8 +20,8 @@
 
 extern int sbn_client_sockfd;
 
-boolean continue_heartbeat = TRUE;
-boolean continue_receive_check = TRUE;
+bool continue_heartbeat = true;
+bool continue_receive_check = true;
 
 
 void *SBN_Client_HeartbeatMinder(void *vargp)
@@ -63,8 +63,8 @@ void *SBN_Client_ReceiveMinder(void *vargp)
         } /* end if */
 
         if (5 == consec_error_count) {
-            continue_heartbeat = FALSE;
-            continue_receive_check = FALSE;
+            continue_heartbeat = false;
+            continue_receive_check = false;
         }
         
     } /* end while */

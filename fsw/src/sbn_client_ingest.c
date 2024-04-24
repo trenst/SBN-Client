@@ -27,7 +27,8 @@ pthread_cond_t  received_condition = PTHREAD_COND_INITIALIZER;
 void ingest_app_message(int SockFd, SBN_MsgSz_t MsgSz)
 {
     int            status, i;
-    boolean        at_least_1_pipe_is_in_use = FALSE;    
+    //sakdbg
+    bool        at_least_1_pipe_is_in_use = false;
     unsigned char  msg_buffer[CFE_SB_MAX_SB_MSG_SIZE];
     CFE_SB_MsgId_t MsgId;
     
@@ -55,11 +56,11 @@ void ingest_app_message(int SockFd, SBN_MsgSz_t MsgSz)
         {
             int j;
             
-            at_least_1_pipe_is_in_use = TRUE;
+            at_least_1_pipe_is_in_use = true;
             
             for(j = 0; j < CFE_SBN_CLIENT_MAX_MSG_IDS_PER_PIPE; j++)
             {
-                if (PipeTbl[i].SubscribedMsgIds[j] == MsgId)
+                if (PipeTbl[i].SubscribedMsgIds[j].Value == MsgId.Value)
                 {
                     if (PipeTbl[i].NumberOfMessages == CFE_PLATFORM_SBN_CLIENT_MAX_PIPE_DEPTH)
                     {

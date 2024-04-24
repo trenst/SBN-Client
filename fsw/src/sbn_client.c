@@ -87,7 +87,8 @@ int32 recv_msg(int32 sockfd)
 {
     unsigned char sbn_hdr_buffer[SBN_PACKED_HDR_SZ];
     unsigned char msg[CFE_SB_MAX_SB_MSG_SIZE];
-    SBN_MsgSz_t MsgSz;
+    // sakdbg SBN_MsgSz_t MsgSz;
+    uint16 MsgSz;
     SBN_MsgType_t MsgType;
     uint32 CpuID;
     
@@ -101,11 +102,19 @@ int32 recv_msg(int32 sockfd)
     }
     else
     {
-        Unpack_t Unpack;
-        Unpack_Init(&Unpack, sbn_hdr_buffer, SBN_PACKED_HDR_SZ);
-        Unpack_UInt16(&Unpack, &MsgSz);
-        Unpack_UInt8(&Unpack, &MsgType);
-        Unpack_UInt32(&Unpack, &CpuID);
+        // sakdbg
+        // Unpack_t Unpack;
+
+        // Unpack_Init(&Unpack, sbn_hdr_buffer, SBN_PACKED_HDR_SZ);
+        // Unpack_UInt16(&Unpack, &MsgSz);
+        // Unpack_UInt8(&Unpack, &MsgType);
+        // Unpack_UInt32(&Unpack, &CpuID);
+        Pack_t Pack;
+        
+        Pack_Init(&Pack, sbn_hdr_buffer, SBN_PACKED_HDR_SZ, false);
+        Unpack_UInt16(&Pack, &MsgSz);
+        Unpack_UInt8(&Pack, &MsgType);
+        Unpack_UInt32(&Pack, &CpuID);        
 
         //TODO: check cpuID to see if it is correct for this location?
 
@@ -124,7 +133,7 @@ int32 recv_msg(int32 sockfd)
                 ingest_app_message(sockfd, MsgSz);
                 status = CFE_SUCCESS;
                 break;
-            case SBN_PROTO_MSG:      
+            case SBN_PROTO_MSG:
                 status = CFE_SBN_CLIENT_ReadBytes(sockfd, msg, MsgSz);
                 break;
             case SBN_HEARTBEAT_MSG:
@@ -133,7 +142,7 @@ int32 recv_msg(int32 sockfd)
 
             default:
                 log_message("SBN_CLIENT: ERROR - recv_msg unrecognized type %d\n", MsgType);
-                status =  CFE_EVS_ERROR; //TODO: change error
+                status =  SBN_ERROR; //TODO: change error
         }
         
     }

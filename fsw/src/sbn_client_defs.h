@@ -24,5 +24,7 @@
 #define CFE_SBN_CLIENT_MAX_MSG_IDS_PER_PIPE         4
 #define CFE_PLATFORM_SBN_CLIENT_MAX_PIPES           5 /* CFE_PLATFORM_SB_MAX_PIPES could be used */
 #define CFE_PLATFORM_SBN_CLIENT_MAX_PIPE_DEPTH      32
+//sakdbg
+#define CFE_SB_MAX_SB_MSG_SIZE                      32768
 
 #endif /* _sbn_client_defs_h_ */

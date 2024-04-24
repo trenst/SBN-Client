@@ -18,6 +18,16 @@
 *************************************************************************/
 
 #include "sbn_interfaces.h"
+#include "cfe_sb_extern_typedefs.h"
+
+typedef CFE_MSG_Message_t* CFE_SB_MsgPtr_t;
+
+// sakdbg
+// typedef struct
+// {
+//     void *Buf;
+//     size_t Sz, Curr;
+// } Unpack_t;
 
 /************************************************************************
 ** Constants Definitions
