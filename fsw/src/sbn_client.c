@@ -56,7 +56,6 @@ CFE_SB_PipeId_t CFE_SBN_Client_GetAvailPipeIdx(void)
  * @param[in] SubType Whether this is a subscription or unsubscription.
  * @param[in] MsgID The CCSDS message ID being (un)subscribed.
  * @param[in] QoS The CCSDS quality of service being (un)subscribed.
- * @param[in] Peer The Peer interface
  */
 void SendSubToSbn(int SubType, CFE_SB_MsgId_t MsgID,
     CFE_SB_Qos_t QoS)
@@ -104,7 +103,6 @@ int32 recv_msg(int32 sockfd)
     {
         // sakdbg
         // Unpack_t Unpack;
-
         // Unpack_Init(&Unpack, sbn_hdr_buffer, SBN_PACKED_HDR_SZ);
         // Unpack_UInt16(&Unpack, &MsgSz);
         // Unpack_UInt8(&Unpack, &MsgType);

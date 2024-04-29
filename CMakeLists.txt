@@ -26,15 +26,8 @@ add_library(sbn_client "SHARED" ${APP_SRC_FILES})
 
 target_include_directories(sbn_client PUBLIC ${ALL_INC})
 
-# Override the default behavior of attaching a "lib" prefix
-#set_target_properties(${APP_NAME} PROPERTIES PREFIX "")
-# SBN?
 
-# Create the install targets for this shared/modular app
-# foreach(TGT ${APP_INSTALL_LIST})
-#   install(TARGETS ${APP_NAME} DESTINATION ${TGT}/${INSTALL_SUBDIR})
-# endforeach()
 
 # if (ENABLE_UNIT_TESTS)
-#add_subdirectory(unit-test)
+add_subdirectory(unit-test)
 # endif (ENABLE_UNIT_TESTS)

@@ -37,7 +37,6 @@ libsbn_client.so: $(A_FILES)
 	gcc -shared $^ -o libsbn_client.so
 
 %.a : %.c
-	echo "$$A_FILES = $(A_FILES)"
 	gcc -Wall -Werror -c -fPIC $< $(ALL_INC) $(LIBS) -o $@
 	objcopy --redefine-syms=unwrap_symbols.txt $@
 

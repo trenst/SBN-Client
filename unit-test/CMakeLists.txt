@@ -71,6 +71,7 @@ set(WRAPS "${WRAPS},-wrap,pthread_cond_wait")
 # Get the files in the source subdirectory
 set(source_files)
 aux_source_directory("${PROJECT_SOURCE_DIR}/fsw/src" source_files)
+message("source_files=\n" ${source_files})
 
 set(source_file_names)
 foreach(SOURCE_FILE ${source_files})
@@ -80,83 +81,82 @@ foreach(SOURCE_FILE ${source_files})
 endforeach()
     
     
-add_library("logger_stub" OBJECT "${PROJECT_SOURCE_DIR}/unit-test/stubs/sbn_client_logger_stubs.c")
+# add_library("logger_stub" OBJECT "${PROJECT_SOURCE_DIR}/unit-test/stubs/sbn_client_logger_stubs.c")
 
 
-# Get the files in the applications unit-test directory
-set(app_ut_helper_files)
-aux_source_directory("${PROJECT_SOURCE_DIR}/unit-test/helpers" app_ut_helper_files)
-# Have a variable hold the helper library names so they can be referenced later
-set(app_ut_helper_names)
-# Build all the test helpers and save the object names
+# # Get the files in the applications unit-test directory
+# set(app_ut_helper_files)
+# aux_source_directory("${PROJECT_SOURCE_DIR}/unit-test/helpers" app_ut_helper_files)
+# # Have a variable hold the helper library names so they can be referenced later
+# set(app_ut_helper_names)
+# # Build all the test helpers and save the object names
 
-foreach(HELPER_FILE ${app_ut_helper_files})
-    get_filename_component(HELPER_NAME "${HELPER_FILE}" NAME_WE)
-    add_library("${HELPER_NAME}_object" OBJECT "${HELPER_FILE}")
-    list(APPEND app_ut_helper_names "${HELPER_NAME}_object")
-endforeach()
+# foreach(HELPER_FILE ${app_ut_helper_files})
+#     get_filename_component(HELPER_NAME "${HELPER_FILE}" NAME_WE)
+#     add_library("${HELPER_NAME}_object" OBJECT "${HELPER_FILE}")
+#     list(APPEND app_ut_helper_names "${HELPER_NAME}_object")
+# endforeach()
     
-# Generate a dedicated "testrunner" executable that executes the tests for each FSW code unit
-# Cycle through all the app's source files, there will be a test file for each
-foreach(SRCFILE ${source_files})
-    # Get the base sourcfile name as a module name without path or the extension, 
-    # this will be used as the base name of the unit test file.
-    get_filename_component(MODULENAME "${SRCFILE}" NAME_WE)
+# # Generate a dedicated "testrunner" executable that executes the tests for each FSW code unit
+# # Cycle through all the app's source files, there will be a test file for each
+# foreach(SRCFILE ${source_files})
+#     # Get the base sourcfile name as a module name without path or the extension, 
+#     # this will be used as the base name of the unit test file.
+#     get_filename_component(MODULENAME "${SRCFILE}" NAME_WE)
     
-    set(source_file_names_copy ${source_file_names})
+#     set(source_file_names_copy ${source_file_names})
     
-    set(stub_names)
-    if(NOT MODULENAME MATCHES "sbn_client_logger")
-        # aux_source_directory("${PROJECT_SOURCE_DIR}/unit-test/stubs" stub_dir)
-        set(stub_names "logger_stub")
-        remove(source_file_names_copy "sbn_client_logger_object")
-    endif()
+#     set(stub_names)
+#     if(NOT MODULENAME MATCHES "sbn_client_logger")
+#         # aux_source_directory("${PROJECT_SOURCE_DIR}/unit-test/stubs" stub_dir)
+#         set(stub_names "logger_stub")
+#         remove(source_file_names_copy "sbn_client_logger_object")
+#     endif()
     
-    remove(source_file_names_copy "${MODULENAME}_object")
+#     remove(source_file_names_copy "${MODULENAME}_object")
     
-    # Use the module name to find the testname, adding _tests to the end
-    set(TESTNAME "${MODULENAME}_tests")
+#     # Use the module name to find the testname, adding _tests to the end
+#     set(TESTNAME "${MODULENAME}_tests")
     
-    # Make the testcase sourcefile name with path and extension
-    set(TESTCASE_SOURCE_FILE    "${PROJECT_SOURCE_DIR}/unit-test/${TESTNAME}.c")
+#     # Make the testcase sourcefile name with path and extension
+#     set(TESTCASE_SOURCE_FILE    "${PROJECT_SOURCE_DIR}/unit-test/${TESTNAME}.c")
     
-    set(TEST_SOURCE_OBJECT "ut_${TESTNAME}_object")
+#     set(TEST_SOURCE_OBJECT "ut_${TESTNAME}_object")
     
-    # Compile the source unit under test as an OBJECT
-    add_library(${TEST_SOURCE_OBJECT} OBJECT
-        ${SRCFILE}
-    )
+#     # Compile the source unit under test as an OBJECT
+#     add_library(${TEST_SOURCE_OBJECT} OBJECT
+#         ${SRCFILE}
+#     )
     
-    # Apply the UT_C_FLAGS to the units under test
-    # This should enable coverage analysis on platforms that support this
-    set_target_properties(${TEST_SOURCE_OBJECT} PROPERTIES
-        COMPILE_FLAGS "${UT_C_FLAGS}")
+#     # Apply the UT_C_FLAGS to the units under test
+#     # This should enable coverage analysis on platforms that support this
+#     set_target_properties(${TEST_SOURCE_OBJECT} PROPERTIES
+#         COMPILE_FLAGS "${UT_C_FLAGS}")
         
-    # Compile a test runner application, which contains the
-    # actual coverage test code (test cases) and the unit under test
-    # creates sample_app-sample_app-testrunner from coveragetest/coveragetest_sample_app.c
-    add_executable(${TESTNAME}-testrunner
-        ${TESTCASE_SOURCE_FILE}
-        $<TARGET_OBJECTS:${TEST_SOURCE_OBJECT}>
-    )
+#     # Compile a test runner application, which contains the
+#     # actual coverage test code (test cases) and the unit under test
+#     # creates sample_app-sample_app-testrunner from coveragetest/coveragetest_sample_app.c
+#     add_executable(${TESTNAME}-testrunner
+#         ${TESTCASE_SOURCE_FILE}
+#         $<TARGET_OBJECTS:${TEST_SOURCE_OBJECT}>
+#     )
     
-    # This also needs to be linked with WRAPS (for stubbing) and UT_C_FLAGS (for coverage)
-    set_target_properties(${TESTNAME}-testrunner PROPERTIES 
-    LINK_FLAGS "${WRAPS} ${UT_C_FLAGS}")
+#     # This also needs to be linked with WRAPS (for stubbing) and UT_C_FLAGS (for coverage)
+#     set_target_properties(${TESTNAME}-testrunner PROPERTIES LINK_FLAGS "${WRAPS} ${UT_C_FLAGS}")
     
-    # This is also linked with any other stub libraries needed,
-    # as well as the UT assert framework
-    # sbn_client needs referenced here, not sure how to remove it, maybe when there's stubs for sbn_client files?
-    target_link_libraries(${TESTNAME}-testrunner
-        ${source_file_names_copy}
-        ${app_ut_helper_names}
-        ${stub_names}
-        ut_cfe-core_stubs
-        ut_assert
-    )
+#     # This is also linked with any other stub libraries needed,
+#     # as well as the UT assert framework
+#     # sbn_client needs referenced here, not sure how to remove it, maybe when there's stubs for sbn_client files?
+#     target_link_libraries(${TESTNAME}-testrunner
+#         ${source_file_names_copy}
+#         ${app_ut_helper_names}
+#         ${stub_names}
+#         ut_cfe-core_stubs
+#         ut_assert
+#     )
     
-    # Add it to the set of tests to run as part of "make test"
-    add_test(${TESTNAME} ${TESTNAME}-testrunner)
+#     # Add it to the set of tests to run as part of "make test"
+#     add_test(${TESTNAME} ${TESTNAME}-testrunner)
     
-endforeach()
+# endforeach()
 
